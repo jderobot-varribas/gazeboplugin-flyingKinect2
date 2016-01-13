@@ -217,15 +217,7 @@ KinectPlugin::_on_cam_bootstrap_rgb_data(const unsigned char * _data, unsigned i
 	camera_impl->DisconnectNewImageFrame(sub_cam_rgb);
 
 	img_rgb = cv::Mat(_height, _width, CV_8UC3, (float_t*) _data);
-
 	cam_rgbI.onCameraSensorBoostrap(img_rgb, nullptr);
-	try{
-		Ice::Current c;
-		jderobot::ImageFormats formats = cam_rgbI.getImageFormat(c);
-		std::cout<<"getImageFormat :"<<formats[0]<<std::endl;
-	}catch(Ice::Exception &ex){
-		std::cout<<"getImageFormat :"<<ex<<std::endl;
-	}
 
 	sub_cam_rgb = camera_impl->ConnectNewImageFrame(
 		boost::bind(&KinectPlugin::_on_cam_update_rgb_data, this, _1,_2,_3,_4,_5));
