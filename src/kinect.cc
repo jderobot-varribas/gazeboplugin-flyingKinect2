@@ -212,7 +212,7 @@ KinectPlugin::_on_cam_update_depth_data(const float *, unsigned int, unsigned in
 }
 
 void
-v_on_cam_bootstrap_rgb_data(const unsigned char * _data, unsigned int _width, unsigned int _height,
+KinectPlugin::_on_cam_bootstrap_rgb_data(const unsigned char * _data, unsigned int _width, unsigned int _height,
                                       unsigned int, const std::string &){
 	camera_impl->DisconnectNewImageFrame(sub_cam_rgb);
 
