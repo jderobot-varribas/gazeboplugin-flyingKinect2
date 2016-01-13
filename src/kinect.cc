@@ -97,9 +97,9 @@ KinectPlugin::Init(){
 		camera_sensor->SetActive(true);
 
 		sub_cam_depth = camera_impl->ConnectNewDepthFrame(
-			boost::bind(&KinectPlugin::_on_cam_update_depth_data, this, _1,_2,_3,_4,_5));
+			boost::bind(&KinectPlugin::_on_cam_bootstrap_depth_data, this, _1,_2,_3,_4,_5));
 		sub_cam_rgb = camera_impl->ConnectNewImageFrame(
-			boost::bind(&KinectPlugin::_on_cam_update_rgb_data, this, _1,_2,_3,_4,_5));
+			boost::bind(&KinectPlugin::_on_cam_bootstrap_rgb_data, this, _1,_2,_3,_4,_5));
 	}else{
 		std::cerr << _log_prefix << "\t camera was not connected (NULL pointer)" << std::endl;
 	}
