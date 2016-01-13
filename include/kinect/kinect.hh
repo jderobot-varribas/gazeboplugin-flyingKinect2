@@ -38,7 +38,7 @@
 
 namespace kinect{
 
-#define NOT_ASSUME_STATIC_MEMORY
+//#define NOT_ASSUME_STATIC_MEMORY
 //#define PARENT_SENSOR_GETS_UPDATES
 
 

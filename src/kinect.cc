@@ -97,9 +97,9 @@ KinectPlugin::Init(){
 		camera_sensor->SetActive(true);
 
 		sub_cam_depth = camera_impl->ConnectNewDepthFrame(
-			boost::bind(&KinectPlugin::_on_cam_update_depth_data, this, _1,_2,_3,_4,_5));
+			boost::bind(&KinectPlugin::_on_cam_bootstrap_depth_data, this, _1,_2,_3,_4,_5));
 		sub_cam_rgb = camera_impl->ConnectNewImageFrame(
-			boost::bind(&KinectPlugin::_on_cam_update_rgb_data, this, _1,_2,_3,_4,_5));
+			boost::bind(&KinectPlugin::_on_cam_bootstrap_rgb_data, this, _1,_2,_3,_4,_5));
 	}else{
 		std::cerr << _log_prefix << "\t camera was not connected (NULL pointer)" << std::endl;
 	}
@@ -187,8 +187,9 @@ KinectPlugin::_on_cam_update(){
 
 void
 KinectPlugin::_on_cam_bootstrap_depth_data(const float *_data, unsigned int _width, unsigned int _height,
-                                      unsigned int, const std::string &){
+									  unsigned int _depth, const std::string &){
 	camera_impl->DisconnectNewDepthFrame(sub_cam_depth);
+	ONDEBUG_CRITICAL(std::cout<<_log_prefix <<"DephImage bootstrap: "<<_width<<"x"<<_height<<"x"<<_depth<<std::endl;)
 
 	img_depth_raw = cv::Mat(_height, _width, CV_32FC1, (float_t*) _data);
 	img_depth.create(_height, _width, CV_8UC3);
@@ -206,6 +207,7 @@ KinectPlugin::_on_cam_bootstrap_depth_data(const float *_data, unsigned int _wid
 void
 KinectPlugin::_on_cam_update_depth_data(const float *_data, unsigned int _width, unsigned int _height,
                                    unsigned int _depth, const std::string &){
+    ONDEBUG_CRITICAL(std::cout<<_log_prefix <<"DephImage update: "<<_width<<"x"<<_height<<"x"<<_depth<<std::endl;)
 #ifdef NOT_ASSUME_STATIC_MEMORY
     int in_size = _width*_height*_depth;
     int buffer_size = img_depth_raw.rows*img_depth_raw.cols*img_depth_raw.channels();
