@@ -38,7 +38,7 @@
 
 namespace kinect{
 
-#define PARENT_SENSOR_GETS_UPDATES
+//#define PARENT_SENSOR_GETS_UPDATES
 
 class KinectPlugin :
         public gazebo::ModelPlugin,

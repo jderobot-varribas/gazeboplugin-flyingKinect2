@@ -5,7 +5,7 @@ project(gazebo_kinectplugin)
 ## quadrotor2
 set(quadrotor2_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../quadrotor2/include)
 set(quadrotor2_LIBRARY_DIRS ${CMAKE_CURRENT_BINARY_DIR}/../quadrotor2)
-set(quadrotor2_LIBRARIES quadrotorplugin2)
+set(quadrotor2_LIBRARIES gazebo_quadrotor2plugin)
 
 ## easyiceconfig customs
 set(easyiceconfig_STATIC_LIBRARIES easyiceconfig-embedded)

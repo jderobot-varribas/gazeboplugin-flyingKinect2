@@ -192,6 +192,7 @@ KinectPlugin::_on_cam_bootstrap_depth_data(const float *_data, unsigned int _wid
 
 	img_depth_raw = cv::Mat(_height, _width, CV_32FC1, (float_t*) _data);
 	img_depth.create(_height, _width, CV_8UC3);
+	assert( ((void*)img_depth_raw.data == (void*)_data) && "STATIC_MEMORY bad constructor" );
 
 	depth2rgb(img_depth_raw, img_depth);
 	cam_depthI.onCameraSensorBoostrap(img_depth, nullptr);
@@ -203,8 +204,9 @@ KinectPlugin::_on_cam_bootstrap_depth_data(const float *_data, unsigned int _wid
 }
 
 void
-KinectPlugin::_on_cam_update_depth_data(const float *, unsigned int, unsigned int,
+KinectPlugin::_on_cam_update_depth_data(const float *_data, unsigned int, unsigned int,
                                    unsigned int, const std::string &){
+    assert( ((void*)img_depth_raw.data == (void*)_data) && "STATIC_MEMORY UNMET" );
 	depth2rgb(img_depth_raw, img_depth);
 	cam_depthI.onCameraSensorUpdate(img_depth);
 
@@ -212,11 +214,12 @@ KinectPlugin::_on_cam_update_depth_data(const float *, unsigned int, unsigned in
 }
 
 void
-v_on_cam_bootstrap_rgb_data(const unsigned char * _data, unsigned int _width, unsigned int _height,
+KinectPlugin::_on_cam_bootstrap_rgb_data(const unsigned char * _data, unsigned int _width, unsigned int _height,
                                       unsigned int, const std::string &){
 	camera_impl->DisconnectNewImageFrame(sub_cam_rgb);
 
-	img_rgb = cv::Mat(_height, _width, CV_8UC3, (float_t*) _data);
+	img_rgb = cv::Mat(_height, _width, CV_8UC3, (uint8_t*) _data);
+	assert( (img_rgb.data == _data) && "STATIC_MEMORY bad constructor" );
 
 	cam_rgbI.onCameraSensorBoostrap(img_rgb, nullptr);
 	try{
@@ -232,8 +235,9 @@ v_on_cam_bootstrap_rgb_data(const unsigned char * _data, unsigned int _width, un
 }
 
 void
-KinectPlugin::_on_cam_update_rgb_data(const unsigned char *, unsigned int, unsigned int,
+KinectPlugin::_on_cam_update_rgb_data(const unsigned char *_data, unsigned int, unsigned int,
                                    unsigned int, const std::string &){
+    assert( (img_rgb.data == _data) && "STATIC_MEMORY UNMET" );
 	cam_rgbI.onCameraSensorUpdate(img_rgb);
 }
 
