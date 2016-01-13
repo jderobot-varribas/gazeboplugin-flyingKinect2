@@ -204,9 +204,16 @@ KinectPlugin::_on_cam_bootstrap_depth_data(const float *_data, unsigned int _wid
 }
 
 void
-KinectPlugin::_on_cam_update_depth_data(const float *_data, unsigned int, unsigned int,
-                                   unsigned int, const std::string &){
+KinectPlugin::_on_cam_update_depth_data(const float *_data, unsigned int _width, unsigned int _height,
+                                   unsigned int _depth, const std::string &){
+#ifdef NOT_ASSUME_STATIC_MEMORY
+    int in_size = _width*_height*_depth;
+    int buffer_size = img_depth_raw.rows*img_depth_raw.cols*img_depth_raw.channels();
+    assert((in_size == buffer_size) && "UNSUPORTED__CAMERA_DATA_IS_DYNAMIC");
+    memcpy(img_depth_raw.data, _data, in_size);
+#else
     assert( ((void*)img_depth_raw.data == (void*)_data) && "STATIC_MEMORY UNMET" );
+#endif
 	depth2rgb(img_depth_raw, img_depth);
 	cam_depthI.onCameraSensorUpdate(img_depth);
 
